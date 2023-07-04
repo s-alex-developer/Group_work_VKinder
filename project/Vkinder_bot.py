@@ -253,8 +253,8 @@ while True:
 
                         response_to_user = get_next(id, current_profile['result_id'], SearchResults)
 
-                        while check_in_favorite_profiles(id, response_to_user, FavoriteProfiles)[0] \
-                                or check_in_blocked_profiles(id, response_to_user, BlockedProfiles)[0]:
+                        while check_in_favorite_profiles(id, response_to_user, FavoriteProfiles) \
+                                or check_in_blocked_profiles(id, response_to_user, BlockedProfiles):
 
                             print('Пользователь', current_profile['first_name'], current_profile['last_name'],
                                   'внесен в "Избраннное" или "Черный список"')
@@ -308,9 +308,9 @@ while True:
                                             response_to_user = get_next(id, current_profile['result_id'], SearchResults)
 
                                             while check_in_favorite_profiles(id, response_to_user,
-                                                                             FavoriteProfiles)[0] \
+                                                                             FavoriteProfiles) \
                                                     or check_in_blocked_profiles(id, response_to_user,
-                                                                                 BlockedProfiles)[0]:
+                                                                                 BlockedProfiles):
 
                                                 print('Пользователя', current_profile['first_name'],
                                                       current_profile['last_name'],
@@ -362,9 +362,9 @@ while True:
                                             response_to_user = get_next(id, current_profile['result_id'], SearchResults)
 
                                             while check_in_favorite_profiles(id, response_to_user,
-                                                                             FavoriteProfiles)[0] \
+                                                                             FavoriteProfiles) \
                                                     or check_in_blocked_profiles(id, response_to_user,
-                                                                                 BlockedProfiles)[0]:
+                                                                                 BlockedProfiles):
 
                                                 print('Пользователя', current_profile['first_name'],
                                                       current_profile['last_name'],
@@ -414,9 +414,9 @@ while True:
                                             response_to_user = get_next(id, current_profile['result_id'], SearchResults)
 
                                             while check_in_favorite_profiles(id, response_to_user,
-                                                                             FavoriteProfiles)[0] \
+                                                                             FavoriteProfiles) \
                                                     or check_in_blocked_profiles(id, response_to_user,
-                                                                                 BlockedProfiles)[0]:
+                                                                                 BlockedProfiles):
 
                                                 print('Пользователя', current_profile['first_name'],
                                                       current_profile['last_name'],

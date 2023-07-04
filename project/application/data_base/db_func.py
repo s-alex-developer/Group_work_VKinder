@@ -280,7 +280,7 @@ def clean_search_results(user_id: int, SearchResults) -> str:
     return res_text
 
 
-def check_in_favorite_profiles(user_id: int, work_dict: list[dict], FavoriteProfiles) -> list:
+def check_in_favorite_profiles(user_id: int, work_dict: list[dict], FavoriteProfiles) -> bool:
 
     """
 
@@ -307,12 +307,12 @@ def check_in_favorite_profiles(user_id: int, work_dict: list[dict], FavoriteProf
 
         if result.vk_profile_href == work_dict[2]['vk_profile_href']:
 
-            return [True, f'Совпадение по "Избранным": {result.first_name} {result.last_name}.']
+            return True
 
-    return [False, f'Совпадение по "Избранным" нет.']
+    return False
 
 
-def check_in_blocked_profiles(user_id: int, work_dict: list[dict], BlockedProfiles) -> list:
+def check_in_blocked_profiles(user_id: int, work_dict: list[dict], BlockedProfiles) -> bool:
 
     """
 
@@ -339,9 +339,9 @@ def check_in_blocked_profiles(user_id: int, work_dict: list[dict], BlockedProfil
 
         if result.vk_profile_href == work_dict[2]['vk_profile_href']:
 
-            return [True, f'Совпадение по "Заблокированным", ссылка на страницу: {result.vk_profile_href}.']
+            return True
 
-    return [False, f'Совпадение по "Заблокированным" нет.']
+    return False
 
 
 if __name__ == "__main__":
