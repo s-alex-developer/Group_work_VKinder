@@ -1,3 +1,4 @@
+
 """
     Модуль "db_func.py" содержит функции для работы с Базой данных.
 
@@ -31,7 +32,10 @@
         10. Функция check_in_blocked_profiles - выполняет SELECT запрос к таблице БД 'blocked_profiles',
             "Заблокированные профили" и проверяет наличие в ней записи, соответствующей условиям запроса.
 
+    Ознакомится сразу со всей документацией функций можно запустив этот модуль.
+
 """
+
 
 import os
 
@@ -81,13 +85,12 @@ def add_search_results(user_id: int, work_dict: dict, SearchResults):
         Функция выполняет запись одной строки в таблицу БД "search_results" ("Результаты поиска").
 
         Args:
-            user_id: id пользователя ВК, который общается с ботом.
+            user_id: str - id пользователя ВК, который общается с ботом.
 
-            work_dict: словарь, содержащий данные для записи в БД.
+            work_dict: dict - словарь, содержащий данные для записи в БД.
 
             SearchResults: ссылка на класс SearchResults, создающий модель таблицы "search_results",
                            импортируется из модуля db_models.py
-        Returns:
 
     """
 
@@ -118,9 +121,9 @@ def get_next(user_id: int, result_id: int, SearchResults) -> list[dict]:
         соответсвующую текущему значению параметра "result_id".
 
         Args:
-            user_id: id пользователя ВК, который общается с ботом.
+            user_id: int - id пользователя ВК, который общается с ботом.
 
-            result_id: идентификатор, присваиваемый каждой записи в таблице БД "search_results".
+            result_id: int - идентификатор, присваиваемый каждой записи в таблице БД "search_results".
 
             SearchResults: ссылка на класс SearchResults, создающий модель таблицы "search_results",
                            импортируется из модуля db_models.py
@@ -150,32 +153,32 @@ def get_next(user_id: int, result_id: int, SearchResults) -> list[dict]:
         return result
 
 
-def add_to_favorite_profiles(work_dict: list[dict], FavoriteProfiles) -> str:
+def add_to_favorite_profiles(work_list: list[dict], FavoriteProfiles) -> str:
 
     """
         Функция выполняет INSERT запрос к таблице БД 'favorite_profiles', "Избранные профили",
         и добавляет в неё одну запись.
 
         Args:
-            work_dict: список словарей, элемент списка с индексом 2 содержит все необходимые для записи в БД данные.
+            work_list: list[dict] - список словарей, элемент списка с индексом 2 содержит все необходимые для записи в БД данные.
 
             FavoriteProfiles: ссылка на класс FavoriteProfiles, создающий модель таблицы 'favorite_profiles',
                               импортируется из модуля db_models.py
 
-        Returns: res_text - переменную, содержащую текстовые данные, для ответа пользователю ВК.
+        Returns: str - res_text переменную, содержащую текстовые данные, для ответа пользователю ВК.
 
     """
 
     session = create_session()
 
     session.add(FavoriteProfiles(
-        user_id=work_dict[2]["user_id"],
-        vk_profile_href=work_dict[2]["vk_profile_href"],
-        first_name=work_dict[2]["first_name"],
-        last_name=work_dict[2]["last_name"],
-        photo_href_1=work_dict[2]["photo_href_1"],
-        photo_href_2=work_dict[2]["photo_href_2"],
-        photo_href_3=work_dict[2]["photo_href_3"])
+        user_id=work_list[2]["user_id"],
+        vk_profile_href=work_list[2]["vk_profile_href"],
+        first_name=work_list[2]["first_name"],
+        last_name=work_list[2]["last_name"],
+        photo_href_1=work_list[2]["photo_href_1"],
+        photo_href_2=work_list[2]["photo_href_2"],
+        photo_href_3=work_list[2]["photo_href_3"])
     )
 
     session.commit()
@@ -187,34 +190,35 @@ def add_to_favorite_profiles(work_dict: list[dict], FavoriteProfiles) -> str:
     return res_text
 
 
-def add_to_blocked_profiles(work_dict: list[dict], BlockedProfiles) -> str:
+def add_to_blocked_profiles(work_list: list[dict], BlockedProfiles) -> str:
 
     """
         Функция выполняет INSERT запрос к таблице БД 'blocked_profiles', "Игнорируемые профили"
         и добавляет в неё одну запись.
 
         Args:
-            work_dict: список словарей, элемент списка с индексом 2 содержит все необходимые для записи в БД данные.
+            work_list: list[dict] - список словарей, элемент списка с индексом 2 содержит все необходимые для записи
+            в БД данные.
 
             BlockedProfiles: ссылка на класс BlockedProfiles, создающий модель таблицы 'blocked_profiles',
                              импортируется из модуля db_models.py
 
-        Returns: res_text - переменную, содержащую текстовые данные, для ответа пользователю ВК.
+        Returns: str - переменную res_text, содержащую текстовые данные, для ответа пользователю ВК.
 
     """
 
     session = create_session()
 
     session.add(BlockedProfiles(
-        user_id=work_dict[2]["user_id"],
-        vk_profile_href=work_dict[2]["vk_profile_href"])
+        user_id=work_list[2]["user_id"],
+        vk_profile_href=work_list[2]["vk_profile_href"])
     )
 
     session.commit()
 
     session.close()
 
-    res_text = f'Пользователь {work_dict[2]["first_name"]} {work_dict[2]["last_name"]} добавлен в "Черный список"!'
+    res_text = f'Пользователь {work_list[2]["first_name"]} {work_list[2]["last_name"]} добавлен в "Черный список"!'
 
     return res_text
 
@@ -226,12 +230,12 @@ def show_favorite_profiles(user_id: int, FavoriteProfiles) -> list[list[dict]]:
         соответствующие параметрам запроса, и возвращает их для последующей отправки пользователю ВК.
 
         Args:
-            user_id: id пользователя ВК, который общается с ботом.
+            user_id: int - id пользователя ВК, который общается с ботом.
 
             FavoriteProfiles: ссылка на класс FavoriteProfiles, создающий модель таблицы 'favorite_profiles',
                               импортируется из модуля db_models.py
 
-        Returns: список, элементами которого являются списки со вложенными словарями.
+        Returns: list[list[dict] - список, элементами которого являются списки со вложенными словарями.
                  Данные используются для отправки ответа пользователю ВК.
 
     """
@@ -258,12 +262,12 @@ def clean_search_results(user_id: int, SearchResults) -> str:
         соответствующему параметру user_id.
 
         Args:
-            user_id: id пользователя ВК, который общается с ботом.
+            user_id: int - id пользователя ВК, который общается с ботом.
 
             SearchResults: ссылка на класс SearchResults, создающий модель таблицы "search_results",
                            импортируется из модуля db_models.py
 
-        Returns: res_text - переменную, содержащую текстовые данные, для ответа пользователю ВК.
+        Returns: str - переменную res_text, содержащую текстовые данные, для ответа пользователю ВК.
 
     """
 
@@ -280,7 +284,7 @@ def clean_search_results(user_id: int, SearchResults) -> str:
     return res_text
 
 
-def check_in_favorite_profiles(user_id: int, work_dict: list[dict], FavoriteProfiles) -> bool:
+def check_in_favorite_profiles(user_id: int, work_list: list[dict], FavoriteProfiles) -> bool:
 
     """
 
@@ -288,14 +292,14 @@ def check_in_favorite_profiles(user_id: int, work_dict: list[dict], FavoriteProf
         записи, соответствующей условиям запроса.
 
         Args:
-            user_id: id пользователя ВК, который общается с ботом.
+            user_id: int - id пользователя ВК, который общается с ботом.
 
-            work_dict: список словарей, элемент списка с индексом 2 содержит все необходимые данные для проверки.
+            work_list: list[dict] - список словарей, элемент списка с индексом 2 содержит все необходимые данные для проверки.
 
             FavoriteProfiles: ссылка на класс FavoriteProfiles, создающий модель таблицы 'favorite_profiles',
                               импортируется из модуля db_models.py
 
-        Returns: True or False
+        Returns: Bool - True or False
 
     """
 
@@ -305,14 +309,14 @@ def check_in_favorite_profiles(user_id: int, work_dict: list[dict], FavoriteProf
 
     for result in sql_resp:
 
-        if result.vk_profile_href == work_dict[2]['vk_profile_href']:
+        if result.vk_profile_href == work_list[2]['vk_profile_href']:
 
             return True
 
     return False
 
 
-def check_in_blocked_profiles(user_id: int, work_dict: list[dict], BlockedProfiles) -> bool:
+def check_in_blocked_profiles(user_id: int, work_list: list[dict], BlockedProfiles) -> bool:
 
     """
 
@@ -320,14 +324,14 @@ def check_in_blocked_profiles(user_id: int, work_dict: list[dict], BlockedProfil
         в ней записи, соответствующей условиям запроса.
 
         Args:
-            user_id: id пользователя ВК, который общается с ботом.
+            user_id: int - id пользователя ВК, который общается с ботом.
 
-            work_dict: список словарей, элемент списка с индексом 2 содержит все необходимые данные для проверки.
+            work_list: list[dict] - список словарей, элемент списка с индексом 2 содержит все необходимые данные для проверки.
 
             BlockedProfiles: ссылка на класс BlockedProfiles, создающий модель таблицы 'blocked_profiles',
                              импортируется из модуля db_models.py
 
-        Returns: True or False
+        Returns: Bool - True or False
 
     """
 
@@ -337,7 +341,7 @@ def check_in_blocked_profiles(user_id: int, work_dict: list[dict], BlockedProfil
 
     for result in sql_resp:
 
-        if result.vk_profile_href == work_dict[2]['vk_profile_href']:
+        if result.vk_profile_href == work_list[2]['vk_profile_href']:
 
             return True
 

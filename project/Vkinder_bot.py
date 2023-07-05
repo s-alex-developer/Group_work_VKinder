@@ -1,3 +1,17 @@
+
+"""
+    "Vkinder_bot.py" - основной модуль проекта, содержащий всю логику работы ВК бота.
+
+    Взаимодействует с модулями:
+
+        1. db_models.py - содержит классы и методы для создания таблиц БД.
+
+        2. db_func.py - содержит функции для работы с Базой данных.
+
+        3. vk_api содержит функции для взаимодействия с VK API.
+"""
+
+
 import os
 
 import bs4
@@ -7,7 +21,7 @@ from dotenv import find_dotenv, load_dotenv
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
-from application.vk_api.vk_apy import get_city_id, search_profiles, add_profiles_photos
+from application.vk_api.vk_api import get_city_id, search_profiles, add_profiles_photos
 
 from application.data_base.db_models import SearchResults, BlockedProfiles, FavoriteProfiles
 
@@ -15,18 +29,21 @@ from application.data_base.db_func import check_in_favorite_profiles, check_in_b
 from application.data_base.db_func import get_next, show_favorite_profiles, clean_search_results
 from application.data_base.db_func import add_search_results, add_to_favorite_profiles, add_to_blocked_profiles
 
-load_dotenv(find_dotenv())
 
-vk_session = vk_api.VkApi(token=os.getenv('vk_group_token'))
+def send_some_msg(id: int, some_text: str, attachment=None, keyboard=None):
 
-vk = vk_session.get_api()
+    """
+        Отправляет сообщение текущему пользователю ВК.
 
-longpool = VkLongPoll(vk_session)
+    Args:
+        id: int - id пользователя ВК, которому отправляется сообщение.
 
-res = {'user_id': None, 'city': None, 'sex': None, 'age_from': None, 'age_to': None}
+        some_text: str - текст отправляемого сообщения.
 
+        attachment: приложение к сообщению, в нашем случае фотографии.
 
-def send_some_msg(id, some_text, attachment=None, keyboard=None):
+        keyboard: объект, описывающий клавиатуру ВК бота.
+    """
 
     post = {
         "user_id": id,
@@ -45,12 +62,15 @@ def send_some_msg(id, some_text, attachment=None, keyboard=None):
     vk_session.method("messages.send", post)
 
 
-def _clean_all_tag_from_str(string_line):
+def _clean_all_tag_from_str(string_line: str) -> str:
 
     """
-    Очистка строки stringLine от тэгов и их содержимых
-    :param string_line: Очищаемая строка
-    :return: очищенная строка
+        Функция очищает строковые данные, переданные в нее в качестве аргумента, от html тегов и их содержимого.
+
+        Args:
+            string_line: str - исходные строковые данные.
+
+        Returns: str - строковые данные очищенные от тегов.
     """
 
     result = ""
@@ -74,15 +94,40 @@ def _clean_all_tag_from_str(string_line):
     return result
 
 
-def get_user_name_from_vk_id(user_id):
+def get_user_name_from_vk_id(user_id: int) -> str:
+
+    """
+        Функция выполняет get запрос на страницу пользователя СС "ВКонтакте" с указанным id,
+        чтобы получить фамилию и имя данного пользователя.
+
+        Args:
+            user_id: int - id пользователя ВК, который в данный момент общается с ботом.
+
+        Returns: str - строковые данные, содержащие фамилию и имя текущего пользователя ВК бота.
+
+    """
 
     request = requests.get("https://vk.com/id" + str(user_id))
+
     bs = bs4.BeautifulSoup(request.text, "html.parser")
 
     user_name = _clean_all_tag_from_str(bs.findAll("title")[0])
 
     return user_name.split()[0]
 
+
+""" ~~~ НАЧАЛО РАБОТЫ СКРИПТА ВК БОТА ~~~ """
+
+
+load_dotenv(find_dotenv())
+
+vk_session = vk_api.VkApi(token=os.getenv('vk_group_token'))
+
+vk = vk_session.get_api()
+
+longpool = VkLongPoll(vk_session)
+
+res = {'user_id': None, 'city': None, 'sex': None, 'age_from': None, 'age_to': None}
 
 while True:
 
@@ -474,3 +519,7 @@ while True:
 
                         keyboard.add_button('Начать поиск', VkKeyboardColor.POSITIVE)
                         send_some_msg(id, 'Для подбора пары нажмите кнопку <<Начать поиск>>', keyboard=keyboard)
+
+
+
+

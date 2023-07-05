@@ -1,3 +1,4 @@
+
 """
     Модуль "vk_api.py" содержит функции для взаимодействия с VK API.
 
@@ -18,12 +19,14 @@
     3. Функция add_profiles_photos - принимает словарь с данными, полученными в результате работы
        функции search_profiles.
 
-       Выполняет запрос через VK API на сервер CC "ВКонтакте".
+       Выполняет запрос через VK API н
 
-       Позволяет получить три самые популярные фотографии по кол-ву like'ов в максимальном качестве для текущего
+       Позволяет получить три самые популярные фотографии по кол-ву like'ов для текущего
        профиля ('user_id').
 
        Производит объединение переданных в функцию и полученных в результате работы функции данных в один словарь.
+
+    Детально ознакомится с работой функций и структурой используемых данных, можно запустив этот модуль.
 """
 
 
@@ -53,8 +56,10 @@ def get_city_id(work_dict: dict) -> int:
         Args:
 
             city_name: dict, словарь содержащий данные запроса от пользователя ВК бота.
+                       Структура словаря: {'user_id': ..., 'city': type str, 'sex': ..., 'age_from': ..., 'age_to': ...}
 
         Returns: int, id города из БД CC "ВКонтакте"
+                 Структура словаря: {'user_id': ..., 'city': type int, 'sex': ..., 'age_from': ..., 'age_to': ...}
 
     """
 
@@ -86,7 +91,7 @@ def search_profiles(work_dict: dict):
         будет возвращаться один элемент списка.
 
         Args:
-            work_dict: dict, словарь содержащий данные запроса от пользователя ВК бота.
+            work_dict: dict - словарь содержащий данные запроса от пользователя ВК бота.
     """
 
     search_params = {
@@ -141,16 +146,33 @@ def add_profiles_photos(work_dict: dict) -> dict:
 
         Выполняет запрос через VK API на сервер CC "ВКонтакте".
 
-        Позволяет получить три самые популярные фотографии по кол-ву like'ов в максимальном качестве
-        для текущего профиля ('user_id').
+        Позволяет получить три самые популярные фотографии по кол-ву like'ов для текущего профиля ('user_id').
 
         Производит объединение переданных в функцию и полученных в результате работы функции данных в один словарь.
 
         Args:
             work_dict: dict, словарь с данными профиля, полученными в результате работы функции search_profiles.
 
+                       Структура словаря: {'first_name': ...,
+                                           'last_name': ...,
+                                           'photo_href_1': None,
+                                           'photo_href_2': None,
+                                           'photo_href_3': None,
+                                           'result_id': ...,
+                                           'user_id': ...,
+                                           'vk_profile_href': ...}
+
         Returns: dict, словарь содержащий все необходимые данные текущего профиля,
                  для дальнейшей работы с БД и ВК ботом.
+
+                 Структура словаря: {'first_name': ...,
+                                     'last_name': ...,
+                                     'photo_href_1': href_type_str or None,
+                                     'photo_href_2': href_type_str None,
+                                     'photo_href_3': href_type_str None,
+                                     'result_id': ...,
+                                     'user_id': ...,
+                                     'vk_profile_href': ...}
     """
 
     need_dict = {}
@@ -161,6 +183,7 @@ def add_profiles_photos(work_dict: dict) -> dict:
         'extended': 1,
         'count': 100
         }
+
     search_photos_url = 'https://api.vk.com/method/photos.get'
 
     res = requests.get(search_photos_url, params={**access_params, **search_params}).json()
@@ -201,22 +224,24 @@ if __name__ == "__main__":
 
     start_time = datetime.now()
 
-    req = {'user_id': 787770251, 'city': "Москва", 'sex': 1, 'age_from': 30, 'age_to': 35}
+    req = {'user_id': 787770251, 'city': "Тамбов", 'sex': 1, 'age_from': 20, 'age_to': 35}
 
-    print("\nЗапрос от пользователя ВК:", req)
+    print('*' * 225)
+    print("\nИсходный запрос от пользователя ВК: ", req)
     print()
 
     req['city'] = get_city_id(req)
-    print("Запрос от пользователя ВК, замена названия города на id:", req)
+    print('Запрос от пользователя ВК, после применения функции get_city_id", замена названия города на id: ', req)
 
     profile = search_profiles(req)
-    print(profile)
+    print('\nРезультат вызова функции "search_profiles": ', profile)
 
     work_profile = add_profiles_photos(next(profile))
-    print("\nВремя получения первого результата по запросу пользователя: ", datetime.now() - start_time)
-    print("\nФормат данных, с которым мы будем дальше работать:\n")
+    print('\nВремя получения одного результата по запросу пользователя при помощи функций "get_city_id", '
+          '"search_profiles" и "add_profiles_photos" составило: ', datetime.now() - start_time)
+    print("\nФормат данных, с которым мы будем работать далее:\n")
     pprint(work_profile)
-
+    print('\n' + '*' * 225)
 
 
 
