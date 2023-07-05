@@ -5,11 +5,11 @@
 
     Состав модуля:
 
-        1. class SearchResults - модель создания таблицы БД "search_results", "Результаты поиска."
+        1. class SearchResults - описывает модель создания таблицы БД "search_results", "Результаты поиска.
 
-        2. class FavoriteProfiles - модель создания таблицы БД 'favorite_profiles', "Избранные профили."
+        2. class FavoriteProfiles - описывает модель создания таблицы БД 'favorite_profiles', "Избранные профили."
 
-        3. class BlockedProfiles - модель создания таблицы БД 'blocked_profiles', "Игнорируемые профили."
+        3. class BlockedProfiles - описывает модель создания таблицы БД 'blocked_profiles', "Игнорируемые профили."
 
         4. Метод create_tables - создает таблицы в БД используя модели описанные в этом модуле.
 
@@ -25,6 +25,8 @@ Base = declarative_base()
 
 
 class SearchResults(Base):
+
+    """ Класс описывает модель создания таблицы БД "search_results", "Результаты поиска."""
 
     __tablename__ = "search_results"
 
@@ -49,6 +51,8 @@ class SearchResults(Base):
 
 class FavoriteProfiles(Base):
 
+    """ Класс описывает модель создания таблицы БД 'favorite_profiles' "Избранные профили." """
+
     __tablename__ = 'favorite_profiles'
 
     id = sq.Column(sq.Integer, primary_key=True)
@@ -69,6 +73,8 @@ class FavoriteProfiles(Base):
 
 
 class BlockedProfiles(Base):
+
+    """ Класс описывает модель создания таблицы БД 'blocked_profiles', "Игнорируемые профили." """
 
     __tablename__ = 'blocked_profiles'
 

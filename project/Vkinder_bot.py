@@ -102,8 +102,8 @@ while True:
                     case 'завершить' | 'начать поиск':
 
                         send_some_msg(id,
-                                      'Привет, ' + name + "!" + ' Чтобы подобрать вам пару - ответьте на несколько '
-                                                                'вопросов:\nВведите название вашего города')
+                                      'Привет, ' + name + "!" + '\n\nНеобходимо ответить на три простых вопроса!'
+                                                                '\n\nВведите название вашего города:')
                         flag = False
 
                         while not flag:
@@ -120,15 +120,15 @@ while True:
                                         if get_city_id(res):
 
                                             send_some_msg(id,
-                                                          'Отлично, Ваш город' + ' ' + city.title() +
-                                                          '\nС кем бы вы хотели познакомиться?')
+                                                          'Отлично, Ваш город' + ' ' + city.title() + '!' +
+                                                          '\n\nС кем бы вы хотели познакомиться?')
 
                                             keyboard = VkKeyboard(inline=True)
                                             buttons = ["Мужчина", "Женщина"]
                                             keyboard.add_button('Мужчина', VkKeyboardColor.PRIMARY)
                                             keyboard.add_button('Женщина', VkKeyboardColor.POSITIVE)
 
-                                            send_some_msg(id, "Нажмите на кнопку: ", keyboard=keyboard)
+                                            send_some_msg(id, "Сделайте выбор, нажав на кнопку: ", keyboard=keyboard)
                                             flag = True
 
                                             break
@@ -138,7 +138,7 @@ while True:
                                             keyboard = VkKeyboard(one_time=True)
 
                                             keyboard.add_button('Начать поиск', VkKeyboardColor.POSITIVE)
-                                            send_some_msg(id, "Ошибка, такого города не существует, давай еще раз",
+                                            send_some_msg(id, "Ошибка, такого города не существует, повторите попытку:",
                                                           )
                                             flag = False
 
@@ -175,14 +175,15 @@ while True:
                                             keyboard.add_button('Мужчина', VkKeyboardColor.PRIMARY)
                                             keyboard.add_button('Женщина', VkKeyboardColor.POSITIVE)
 
-                                            send_some_msg(id, "Нажмите на кнопку: ", keyboard=keyboard)
+                                            send_some_msg(id, "Сделайте выбор, нажав на кнопку: ", keyboard=keyboard)
 
                                             break
 
                                     send_some_msg(id,
-                                                  'Введите через дефис диапазон искомого возраста .\n'
-                                                  'Пример : 20-30, означает что в'
-                                                  ' результат попадут только пользователи от 20 до 30 лет ')
+                                                  'Хороший выбор!)\n\n'
+                                                  'Введите через дефис диапазон возраста кандидатов:\n\n'
+                                                  'Запись 20-30 будет означать, что в результаты поиска'
+                                                  ' попадут люди от 20 до 30 лет.')
                                     break
 
                         flag = False
@@ -199,7 +200,7 @@ while True:
                                     except Exception as er:
 
                                         flag = False
-                                        send_some_msg(id, 'Неверный формат ввода возраста, попробуй еще раз ', )
+                                        send_some_msg(id, 'Возраст указан не верно, попробуй еще раз: ', )
 
                                         break
 
@@ -214,19 +215,21 @@ while True:
 
                                             keyboard = VkKeyboard(one_time=True)
                                             keyboard.add_button('Просмотреть результаты', VkKeyboardColor.PRIMARY)
-                                            send_some_msg(id, 'Пристегнитесь! Выдаем результаты: ', keyboard=keyboard)
+                                            send_some_msg(id, 'Возраст просто "Персик")\n\n'
+                                                              'Поиск выполнен!\n\nНажмите "Просмотреть результаты".',
+                                                          keyboard=keyboard)
 
                                             flag = True
 
                                         else:
                                             flag = False
-                                            send_some_msg(id, 'Неверный формат ввода возраста, попробуй еще раз ', )
+                                            send_some_msg(id, 'Возраст указан не верно, попробуй еще раз: ', )
                                             break
 
                                     except Exception as er:
 
                                         flag = False
-                                        send_some_msg(id, 'Неверный формат ввода возраста, попробуй еще раз ', )
+                                        send_some_msg(id, 'Возраст указан не верно, попробуй еще раз: ', )
                                         break
 
                                     break
@@ -470,4 +473,4 @@ while True:
                         keyboard = VkKeyboard(one_time=True)
 
                         keyboard.add_button('Начать поиск', VkKeyboardColor.POSITIVE)
-                        send_some_msg(id, 'Для начала подбора пары нажмите <<Начать поиск>>', keyboard=keyboard)
+                        send_some_msg(id, 'Для подбора пары нажмите кнопку <<Начать поиск>>', keyboard=keyboard)
