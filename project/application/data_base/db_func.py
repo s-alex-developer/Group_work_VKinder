@@ -254,7 +254,7 @@ def show_favorite_profiles(user_id: int, FavoriteProfiles) -> list[list[dict]]:
     return work_list
 
 
-def clean_search_results(user_id: int, SearchResults) -> str:
+def cleans_search_results(user_id: int, SearchResults) -> str:
 
     """
 
@@ -365,7 +365,7 @@ if __name__ == "__main__":
     print('*' * 225)
     help(show_favorite_profiles)
     print('*' * 225)
-    help(clean_search_results)
+    help(cleans_search_results)
     print('*' * 225)
     help(check_in_favorite_profiles)
     print('*' * 225)

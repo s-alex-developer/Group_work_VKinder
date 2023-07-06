@@ -26,7 +26,7 @@ from application.vk_api.vk_api import get_city_id, search_profiles, add_profiles
 from application.data_base.db_models import SearchResults, BlockedProfiles, FavoriteProfiles
 
 from application.data_base.db_func import check_in_favorite_profiles, check_in_blocked_profiles
-from application.data_base.db_func import get_next, show_favorite_profiles, clean_search_results
+from application.data_base.db_func import get_next, show_favorite_profiles, cleans_search_results
 from application.data_base.db_func import add_search_results, add_to_favorite_profiles, add_to_blocked_profiles
 
 
@@ -62,7 +62,7 @@ def send_some_msg(id: int, some_text: str, attachment=None, keyboard=None):
     vk_session.method("messages.send", post)
 
 
-def _clean_all_tag_from_str(string_line: str) -> str:
+def cleans_all_tag_from_str(string_line: str) -> str:
 
     """
         Функция очищает строковые данные, переданные в нее в качестве аргумента, от html тегов и их содержимого.
@@ -111,7 +111,7 @@ def get_user_name_from_vk_id(user_id: int) -> str:
 
     bs = bs4.BeautifulSoup(request.text, "html.parser")
 
-    user_name = _clean_all_tag_from_str(bs.findAll("title")[0])
+    user_name = cleans_all_tag_from_str(bs.findAll("title")[0])
 
     return user_name.split()[0]
 
@@ -497,7 +497,7 @@ while True:
 
                                         case 'завершить поиск':
 
-                                            res_text = clean_search_results(id, SearchResults)
+                                            res_text = cleans_search_results(id, SearchResults)
 
                                             send_some_msg(
                                                 id,
