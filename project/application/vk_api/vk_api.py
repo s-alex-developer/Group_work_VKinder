@@ -100,7 +100,7 @@ def search_profiles(work_dict: dict):
         'sex': work_dict['sex'],
         'age_from': work_dict['age_from'],
         'age_to': work_dict['age_to'],
-        'count': 30,
+        'count': 1000,
         'has_photo': 1  # только пользователи с фото
     }
 
@@ -181,7 +181,7 @@ def add_profiles_photos(work_dict: dict) -> dict:
         'owner_id': work_dict['user_id'],
         'album_id': 'profile',
         'extended': 1,
-        'count': 100
+        'count': 1000
         }
 
     search_photos_url = 'https://api.vk.com/method/photos.get'
